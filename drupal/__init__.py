@@ -45,8 +45,8 @@ def enable_disable_modules(site=None):
                 env.run('cat modules.%s.disabled' % site).splitlines()
             )
 
-            enabled_modules += site_enabled_modules
-            disabled_modules += site_disabled_modules
+            enabled_modules |= site_enabled_modules
+            disabled_modules |= site_disabled_modules
 
         enabled_modules -= disabled_modules
 
