@@ -55,7 +55,7 @@ def enable_disable_modules(site=None):
         )
 
         current_disabled_modules = set(
-            drush('pm-list --status="disabled, not installed" --pipe')
+            drush('pm-list --status="disabled,not installed" --pipe')
             .splitlines()
         )
 
