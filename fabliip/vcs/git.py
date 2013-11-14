@@ -25,15 +25,25 @@ def update_remote_project_root(tag):
         env.run('git submodule update')
 
 
-def get_latest_tag(commit=None):
+def get_latest_tag(commit='HEAD', local=True):
     """
-    Returns the latest reachable tag from the given commit, or HEAD if not
-    specified.
+    Return the latest reachable tag from the given commit.
+
+    Arguments:
+    commit -- The name of the commit to use (tag, hash, etc) (default HEAD)
+    local -- Whether to get the latest local or remote tag (default True)
+
     """
-    with nested(env.cd(env.project_root), hide('commands')):
-        tag = local('git describe --tag --abbrev=0 {commit}'.format(
-            commit=commit if commit is not None else ''
-        ), capture=True)
+    git_command = 'git describe --tag --abbrev=0 {commit}'.format(
+        commit=commit if commit is not None else ''
+    )
+
+    with hide('commands'):
+        if local:
+                tag = local(git_command)
+        else:
+            with env.cd(env.project_root):
+                tag = env.run(git_command)
 
     return tag
 
