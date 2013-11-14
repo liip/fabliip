@@ -46,8 +46,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'.'
-copyright = u'2013, Author'
+project = u'Fabliip'
+copyright = u'2013, Sylvain Fankhauser'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -264,10 +264,10 @@ texinfo_documents = [
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'.'
-epub_author = u'Author'
-epub_publisher = u'Author'
-epub_copyright = u'2013, Author'
+epub_title = u'Fabliip'
+epub_author = u'Sylvain Fankhauser'
+epub_publisher = u''
+epub_copyright = u'2013, Sylvain Fankhauser'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'.'
