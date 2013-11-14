@@ -1,6 +1,7 @@
 from contextlib import nested
 
 from fabric.api import env, hide, local
+from fabric.context_managers import quiet
 
 
 def push_tag(tag, remote='origin'):
@@ -38,12 +39,19 @@ def get_latest_tag(commit='HEAD', run_locally=True):
         commit=commit if commit is not None else ''
     )
 
-    with hide('commands'):
+    with nested(hide('commands'), quiet()):
         if run_locally:
                 tag = local(git_command, capture=True)
         else:
             with env.cd(env.project_root):
                 tag = env.run(git_command)
+
+    # For strange reasons the above call to env.run returns git's stderr in
+    # case of failure (eg. if there are no tags yet) even with combine_stderr
+    # set to False. This is a temporary hack to avoid returning git's error
+    # message as the tag name
+    if tag.return_code != 0:
+        tag = ''
 
     return tag
 
