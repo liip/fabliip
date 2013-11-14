@@ -4,6 +4,10 @@ from fabric.api import env
 
 
 def multisite(func):
+    if 'sites' not in env:
+        raise RuntimeError("To use the multisite decorator you need to set the"
+                           " `env.sites` variable.")
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if args:
