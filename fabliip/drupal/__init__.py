@@ -88,7 +88,7 @@ def set_maintenance_mode(enabled):
     """
     Enables or disables the maintenance mode.
     """
-    drush('vset maintenance_mode %s' % '1' if enabled else '0')
+    drush('vset maintenance_mode %s' % ('1' if enabled else '0'))
 
 
 def clear_cache():
