@@ -56,6 +56,27 @@ def get_latest_tag(commit='HEAD', run_locally=True):
     return tag
 
 
+def get_latest_commit(run_locally=True):
+    """
+    Return the commit identified by the current HEAD.
+
+    Arguments:
+        run_locally -- Whether to get the latest local or remote HEAD (default
+        True)
+
+    """
+    git_command = 'git rev-parse HEAD'
+
+    with nested(hide('commands'), quiet()):
+        if run_locally:
+                commit = local(git_command, capture=True)
+        else:
+            with env.cd(env.project_root):
+                commit = env.run(git_command)
+
+    return commit
+
+
 def get_commit_messages(first_commit, last_commit):
     """
     Returns all commit messages between first_commit and last_commit in an
