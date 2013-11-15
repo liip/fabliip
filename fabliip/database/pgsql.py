@@ -21,7 +21,7 @@ def dump(backup_path, database_name, user='postgres', host=None):
                               .format(user=user))
 
         with shell_env(PGPASSWORD=db_password):
-            env.run('pg_dump -Fc -U {user} -h {host} {database} >'
+            env.run('pg_dump -Fc -U {user} -h {host} {database_name} >'
                     ' {backup_path}'
                     .format(
                         user=user,
