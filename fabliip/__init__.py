@@ -1,4 +1,4 @@
-from fabric.api import env, local
+from fabric import api
 from fabric.context_managers import quiet
 
 
@@ -9,7 +9,7 @@ def local_run_wrapper(*args, **kwargs):
     """
     kwargs['capture'] = True
 
-    return local(*args, **kwargs)
+    return api.local(*args, **kwargs)
 
 
 def file_exists(path):
@@ -18,6 +18,6 @@ def file_exists(path):
     case, False otherwise.
     """
     with quiet():
-        exists = env.run('test -e {path}'.format(path=path)).succeeded
+        exists = api.run('test -e {path}'.format(path=path)).succeeded
 
     return exists

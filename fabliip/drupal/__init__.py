@@ -1,6 +1,6 @@
 from contextlib import nested
 
-from fabric.api import env, hide
+from fabric import api
 
 from fabliip import file_exists
 
@@ -9,8 +9,8 @@ def drush(command):
     """
     Runs a drush command on the server.
     """
-    with env.cd(env.drupal_root):
-        output = env.run('drush -y {command}'.format(command=command))
+    with api.cd(api.env.drupal_root):
+        output = api.run('drush -y {command}'.format(command=command))
 
     return output
 
@@ -24,9 +24,9 @@ def enable_disable_modules(site=None):
     with a global modules.enabled/disabled file and a site-specific
     modules.site.enabled/disabled file.
     """
-    with nested(env.cd(env.project_root), hide('commands')):
-        enabled_modules = set(env.run('cat modules.enabled').splitlines())
-        disabled_modules = set(env.run('cat modules.disabled').splitlines())
+    with nested(api.cd(api.env.project_root), api.hide('commands')):
+        enabled_modules = set(api.run('cat modules.enabled').splitlines())
+        disabled_modules = set(api.run('cat modules.disabled').splitlines())
 
         if site is not None:
             site_enabled_modules_file = 'modules.%s.enabled' % site
@@ -39,10 +39,10 @@ def enable_disable_modules(site=None):
                                 " modules.{site}.disabled)".format(site=site))
 
             site_enabled_modules = set(
-                env.run('cat modules.%s.enabled' % site).splitlines()
+                api.run('cat modules.%s.enabled' % site).splitlines()
             )
             site_disabled_modules = set(
-                env.run('cat modules.%s.disabled' % site).splitlines()
+                api.run('cat modules.%s.disabled' % site).splitlines()
             )
 
             enabled_modules |= site_enabled_modules

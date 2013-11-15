@@ -1,10 +1,10 @@
 from functools import wraps
 
-from fabric.api import env
+from fabric import api
 
 
 def multisite(func):
-    if 'sites' not in env:
+    if 'sites' not in api.env:
         raise RuntimeError("To use the multisite decorator you need to set the"
                            " `env.sites` variable.")
 
@@ -20,20 +20,22 @@ def multisite(func):
         selected_environment = func.__name__
 
         if site is not None:
-            if site not in env.sites:
-                raise Exception("Site {site} is not part of the possible sites"
-                                " ({sites})".format(site=site,
-                                                    sites=env.sites.keys()))
+            if site not in api.env.sites:
+                raise Exception(
+                    "Site {site} is not part of the possible sites ({sites})"
+                    .format(site=site, sites=api.env.sites.keys())
+                )
 
-            if selected_environment not in env.sites[site]:
-                raise Exception("Site {site} has no {env}"
-                                " environment".format(site=site,
-                                                      env=selected_environment))
+            if selected_environment not in api.env.sites[site]:
+                raise Exception(
+                    "Site {site} has no {env} environment"
+                    .format(site=site, env=selected_environment)
+                )
 
-            for setting, value in env.sites[site][selected_environment].iteritems():
-                env[setting] = value
+            for setting, value in api.env.sites[site][selected_environment].iteritems():
+                api.env[setting] = value
 
-            env.site = site
+            api.env.site = site
 
         return func(*args, **kwargs)
     return wrapper

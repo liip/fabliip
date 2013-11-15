@@ -1,6 +1,6 @@
 from getpass import getpass
 
-from fabric.api import env, shell_env, sudo
+from fabric import api
 
 
 def dump(backup_path, database_name, user='postgres', host=None):
@@ -11,17 +11,17 @@ def dump(backup_path, database_name, user='postgres', host=None):
     will be used and the user will be asked for a password.
     """
     if host is None:
-        sudo('pg_dump -Fc {database_name} > {backup_path}'
-             .format(
-                 database_name=database_name,
-                 backup_path=backup_path,
-             ), user=user)
+        api.sudo('pg_dump -Fc {database_name} > {backup_path}'
+                 .format(
+                     database_name=database_name,
+                     backup_path=backup_path,
+                 ), user=user)
     else:
         db_password = getpass('Enter database password for {user}: '
                               .format(user=user))
 
-        with shell_env(PGPASSWORD=db_password):
-            env.run('pg_dump -Fc -U {user} -h {host} {database_name} >'
+        with api.shell_env(PGPASSWORD=db_password):
+            api.run('pg_dump -Fc -U {user} -h {host} {database_name} >'
                     ' {backup_path}'
                     .format(
                         user=user,

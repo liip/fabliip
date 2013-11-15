@@ -1,4 +1,4 @@
-from fabric.api import env
+from fabric import api
 
 
 def ls(path):
@@ -8,8 +8,8 @@ def ls(path):
     Arguments:
         path -- The path of the directory to get the files from
     """
-    with env.cd(path):
-        files = env.run('for i in *; do echo $i; done')
+    with api.cd(path):
+        files = api.run('for i in *; do echo $i; done')
         files_list = files.replace('\r', '').split('\n')
 
     return files_list
