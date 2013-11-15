@@ -1,6 +1,6 @@
 from contextlib import nested
 
-from fabric.api import env, hide, local
+from fabric import api
 from fabric.context_managers import quiet
 
 
@@ -8,7 +8,7 @@ def push_tag(tag, remote='origin'):
     """
     Pushes the given tag to the given remote.
     """
-    local('git push {remote} {tag}'.format(
+    api.local('git push {remote} {tag}'.format(
         remote=remote,
         tag=tag)
     )
@@ -19,11 +19,11 @@ def update_remote_project_root(tag):
     Fetches the latest git objects on the remote, checks out the given tag and
     updates the submodules if necessary.
     """
-    with nested(env.cd(env.project_root), hide('commands')):
-        env.run('git fetch -t -p')
-        env.run('git checkout {tag}'.format(tag=tag))
-        env.run('git submodule sync')
-        env.run('git submodule update')
+    with nested(api.cd(api.env.project_root), api.hide('commands')):
+        api.run('git fetch -t -p')
+        api.run('git checkout {tag}'.format(tag=tag))
+        api.run('git submodule sync')
+        api.run('git submodule update')
 
 
 def get_latest_tag(commit='HEAD', run_locally=True):
@@ -39,14 +39,14 @@ def get_latest_tag(commit='HEAD', run_locally=True):
         commit=commit if commit is not None else ''
     )
 
-    with nested(hide('commands'), quiet()):
+    with nested(api.hide('commands'), quiet()):
         if run_locally:
-                tag = local(git_command, capture=True)
+                tag = api.local(git_command, capture=True)
         else:
-            with env.cd(env.project_root):
-                tag = env.run(git_command)
+            with api.cd(api.env.project_root):
+                tag = api.run(git_command)
 
-    # For strange reasons the above call to env.run returns git's stderr in
+    # For strange reasons the above call to run returns git's stderr in
     # case of failure (eg. if there are no tags yet) even with combine_stderr
     # set to False. This is a temporary hack to avoid returning git's error
     # message as the tag name
@@ -67,12 +67,12 @@ def get_latest_commit(run_locally=True):
     """
     git_command = 'git rev-parse HEAD'
 
-    with nested(hide('commands'), quiet()):
+    with nested(api.hide('commands'), quiet()):
         if run_locally:
-                commit = local(git_command, capture=True)
+                commit = api.local(git_command, capture=True)
         else:
-            with env.cd(env.project_root):
-                commit = env.run(git_command)
+            with api.cd(api.env.project_root):
+                commit = api.run(git_command)
 
     return commit
 
@@ -82,8 +82,8 @@ def get_commit_messages(first_commit, last_commit):
     Returns all commit messages between first_commit and last_commit in an
     abbreviated form.
     """
-    with hide('commands'):
-        changes = local(
+    with api.hide('commands'):
+        changes = api.local(
             'git log --reverse --oneline {first_commit}..{last_commit}'
             .format(
                 first_commit=first_commit,
