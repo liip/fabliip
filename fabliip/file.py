@@ -1,4 +1,7 @@
+from contextlib import nested
+
 from fabric import api
+from fabric.context_managers import quiet
 
 
 def ls(path):
@@ -8,7 +11,7 @@ def ls(path):
     Arguments:
         path -- The path of the directory to get the files from
     """
-    with api.cd(path):
+    with nested(api.cd(path), quiet()):
         files = api.run('for i in *; do echo $i; done')
         files_list = files.replace('\r', '').split('\n')
 
