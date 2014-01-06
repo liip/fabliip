@@ -16,3 +16,14 @@ def ls(path):
         files_list = files.replace('\r', '').split('\n')
 
     return files_list
+
+
+def file_exists(path):
+    """
+    Checks if the given path exists on the host and returns True if that's the
+    case, False otherwise.
+    """
+    with quiet():
+        exists = api.run('test -e {path}'.format(path=path)).succeeded
+
+    return exists

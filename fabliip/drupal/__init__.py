@@ -2,7 +2,7 @@ from contextlib import nested
 
 from fabric import api
 
-from fabliip import file_exists
+from fabliip.file import file_exists
 
 
 def drush(command):
