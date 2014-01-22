@@ -1,12 +1,22 @@
-.. . documentation master file, created by
-   sphinx-quickstart on Thu Nov 14 08:42:01 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Welcome to Fabliip's documentation!
+===================================
 
-Welcome to .'s documentation!
-=============================
+What is Fabliip?
+----------------
 
-Contents:
+Fabliip is a set of functions aimed at helping developers deploy their
+websites. It is meant to be used as part of Fabric scripts to ease for example
+the backup of a database, the upgrade of a remote git repository, etc.
+
+Installation
+------------
+
+Install it with pip::
+
+    pip install fabliip
+
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 4
