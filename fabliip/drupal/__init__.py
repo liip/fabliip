@@ -1,3 +1,12 @@
+"""
+Functions for Drupal sites.
+
+The `drupal_root` environment variable is used in some functions of this module
+to run the commands in the correct directory. Make sure it is set to the root
+directory of your Drupal project.
+
+This module requires `drush` to be installed on the remote server.
+"""
 from contextlib import nested
 
 from fabric import api
@@ -8,6 +17,8 @@ from fabliip.file import file_exists
 def drush(command):
     """
     Runs a drush command on the server.
+
+    Requires the `drupal_root` environment variable to be set.
     """
     with api.cd(api.env.drupal_root):
         output = api.run('drush -y {command}'.format(command=command))

@@ -18,6 +18,8 @@ def update_remote_project_root(tag):
     """
     Fetches the latest git objects on the remote, checks out the given tag and
     updates the submodules if necessary.
+
+    Requires the `project_root` environment variable to be set.
     """
     with nested(api.cd(api.env.project_root), api.hide('commands')):
         api.run('git fetch -t -p')
