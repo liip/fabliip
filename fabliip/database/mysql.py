@@ -24,5 +24,3 @@ def dump(backup_path, database_name, user='root', host=None, password=None):
                 password=password,
                 backup_path=backup_path,
             ))
-
-
