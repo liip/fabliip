@@ -14,14 +14,14 @@ def push_tag(tag, remote='origin'):
     )
 
 
-def update_remote_project_root(tag):
+def update_remote_repository_root(tag):
     """
     Fetches the latest git objects on the remote, checks out the given tag and
     updates the submodules if necessary.
 
-    Requires the `project_root` environment variable to be set.
+    Requires the `repository_root` environment variable to be set.
     """
-    with nested(api.cd(api.env.project_root), api.hide('commands')):
+    with nested(api.cd(api.env.repository_root), api.hide('commands')):
         api.run('git fetch -t -p')
         api.run('git checkout {tag}'.format(tag=tag))
         api.run('git submodule sync')
@@ -43,9 +43,9 @@ def get_latest_tag(commit='HEAD', run_locally=True):
 
     with nested(api.hide('commands'), quiet()):
         if run_locally:
-                tag = api.local(git_command, capture=True)
+            tag = api.local(git_command, capture=True)
         else:
-            with api.cd(api.env.project_root):
+            with api.cd(api.env.repository_root):
                 tag = api.run(git_command)
 
     # For strange reasons the above call to run returns git's stderr in
@@ -71,9 +71,9 @@ def get_latest_commit(run_locally=True):
 
     with nested(api.hide('commands'), quiet()):
         if run_locally:
-                commit = api.local(git_command, capture=True)
+            commit = api.local(git_command, capture=True)
         else:
-            with api.cd(api.env.project_root):
+            with api.cd(api.env.repository_root):
                 commit = api.run(git_command)
 
     return commit
