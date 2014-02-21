@@ -2,8 +2,6 @@
 This module provides a deployment structure similar to what Capistrano does. By
 default, the project layout looks like that::
 
-    backups/                                  -- Database backups (for rollbacks)
-        20140830180015_1.2.3.dump.sql
     current -> releases/20140830180015_1.2.3  -- Symlink to the current release
     releases/
         20140830151210_1.2.2/
@@ -150,6 +148,10 @@ def get_releases():
 
 
 def get_currently_installed_version():
+    """
+    Return the currently installed version (tag) by reading the contents of the
+    VERSION file.
+    """
     with cd(env.project_root):
         version = run("cat VERSION")
 
@@ -157,46 +159,9 @@ def get_currently_installed_version():
 
 
 @signals.register
-def update_version_file(tag):
+def update_version_file(version):
+    """
+    Update the VERSION file with the given version.
+    """
     with cd(env.project_root):
-        run("echo %s > VERSION" % tag)
-
-
-@signals.register
-def rollback(release_name=None):
-    """
-    Roll back to a given release by restoring the database dump and switching
-    the symlink to the current release.
-    """
-    installed_releases = get_releases()
-
-    if release_name is None:
-        try:
-            release_name = installed_releases[-2]
-        except KeyError:
-            logger.error("Error: no release to rollback to.")
-            return 1
-    else:
-        if release_name not in installed_releases:
-            logger.error(
-                "Error: the given release is not installed on the server.\n"
-                " Available releases:\n\n%s" % "\n".join(
-                    installed_releases
-                )
-            )
-            return 1
-
-    confirm = prompt(
-        "You're about to rollback to release {release} on {server}. Are you"
-        " sure you want to continue (y/n)?".format(
-            release=colors.yellow(release_name, bold=True),
-            server=colors.yellow(env.hosts[0], bold=True)
-        )
-    )
-
-    if confirm != "y":
-        print("Aborting.")
-        return
-
-    # TODO restore the database from the backup
-    activate_release(release_name)
+        run("echo %s > VERSION" % version)
