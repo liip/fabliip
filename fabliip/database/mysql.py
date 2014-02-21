@@ -2,6 +2,8 @@ from getpass import getpass
 
 from fabric import api
 
+DEFAULT_HOST = '127.0.0.1'
+
 
 def dump(backup_path, database_name, user='root', host=None, password=None):
     """
@@ -10,7 +12,7 @@ def dump(backup_path, database_name, user='root', host=None, password=None):
     If password is set to None, a prompt will ask a password.
     """
     if host is None:
-        host = default_host
+        host = DEFAULT_HOST
 
     if password is None:
         password = get_password(user)
@@ -32,7 +34,7 @@ def restore(backup_path, database_name, user='root', host=None, password=None):
     If password is set to None, a prompt will ask a password.
     """
     if host is None:
-        host = default_host
+        host = DEFAULT_HOST
 
     if password is None:
         password = get_password(user)
@@ -45,13 +47,6 @@ def restore(backup_path, database_name, user='root', host=None, password=None):
                 password=password,
                 backup_path=backup_path,
             ))
-
-
-def default_host():
-    """
-    Return the default host
-    """
-    return '127.0.0.1'
 
 
 def get_password(user):
