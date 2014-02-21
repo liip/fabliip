@@ -58,11 +58,19 @@ def register(function):
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
-        emit("pre_%s" % function.__name__)
-        ret = function(*args, **kwargs)
-        emit("post_%s" % function.__name__)
+        emit("{module}.pre_{function}".format(
+            module=function.__module__,
+            function=function.__name__
+        ))
 
-        return ret
+        return_value = function(*args, **kwargs)
+
+        emit("{module}.post_{function}".format(
+            module=function.__module__,
+            function=function.__name__
+        ))
+
+        return return_value
 
     return wrapper
 
