@@ -29,6 +29,14 @@ fabliip.file module
     :undoc-members:
     :show-inheritance:
 
+fabliip.releases module
+-----------------------
+
+.. automodule:: fabliip.releases
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 fabliip.signals module
 ----------------------
 
