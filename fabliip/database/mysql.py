@@ -10,11 +10,10 @@ def dump(backup_path, database_name, user='root', host=None, password=None):
     If password is set to None, a prompt will ask a password.
     """
     if host is None:
-        host = '127.0.0.1'
+        host = default_host
 
     if password is None:
-        password = getpass('Enter database password for {user}: '
-                           .format(user=user))
+        password = get_password(user)
 
     api.run('mysqldump {database_name} -h{host} -u{user} -p{password} > {backup_path}'
             .format(
@@ -24,3 +23,40 @@ def dump(backup_path, database_name, user='root', host=None, password=None):
                 password=password,
                 backup_path=backup_path,
             ))
+
+
+def restore(backup_path, database_name, user='root', host=None, password=None):
+    """
+    Restore MySQL database.
+    If host is set to None, 127.0.0.1 will be used.
+    If password is set to None, a prompt will ask a password.
+    """
+    if host is None:
+        host = default_host
+
+    if password is None:
+        password = get_password(user)
+
+    api.run('mysql -h{host} -u{user} -p{password} {database_name} < {backup_path}'
+            .format(
+                database_name=database_name,
+                host=host,
+                user=user,
+                password=password,
+                backup_path=backup_path,
+            ))
+
+
+def default_host():
+    """
+    Return the default host
+    """
+    return '127.0.0.1'
+
+
+def get_password(user):
+    """
+    Ask a password in the prompt
+    """
+    return getpass('Enter database password for {user}: '
+                   .format(user=user))
