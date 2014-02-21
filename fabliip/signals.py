@@ -86,4 +86,4 @@ def task(function):
     Convenience decorator that wraps the default Fabric task decorator with the
     :py:func:`register` decorator.
     """
-    return register(fabric_task(function))
+    return fabric_task(register(function))
