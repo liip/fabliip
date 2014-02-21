@@ -1,5 +1,33 @@
 """
 This module allows you to send/receive signals during your deployment process.
+
+You can use it to create modules separated from your main fabfile and make them
+respond to certain signals. For example consider the following example, in your
+``fabfile.py``::
+
+    # This will trigger a pre_deploy and post_deploy signal
+    @signals.register
+    def deploy():
+        deploy_my_app()
+
+In your separate module, use the ``on`` decorator to hook on this signal::
+
+    # This goes in your separate module
+    @signals.on('pre_deploy')
+    def my_hook():
+        print("This is called at the beginning of the deploy task")
+
+You can also emit signals independently::
+
+    def deploy():
+        signals.emit('pre_deploy_my_app')
+        deploy_my_app()
+        signals.emit('hurray_my_app_is_deployed')
+
+The :py:func:`task` decorator wraps the default :py:func:`fabric.api.task`
+decorator with the :py:func:`register` signal, allowing you to intercept
+pre/post signals without the need of adding the :py:func:`register` decorator
+or firing the signals yourself.
 """
 
 from collections import defaultdict
@@ -21,8 +49,12 @@ def emit(signal):
 
 def register(function):
     """
-    Decorator that will emit pre_ and post_ signals before and after the
-    function is executed.
+    Decorator that will emit pre and post signals before and after the
+    function is executed. The signals are named after the function so if your
+    function is named ``seek_the_holy_grail()``, the signal
+    ``pre_seek_the_holy_grail`` will be fired before your function gets
+    executed and the ``post_seek_the_holy_grail`` signal will be fired after
+    your function has been executed.
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
@@ -51,7 +83,7 @@ def on(signal):
 
 def task(function):
     """
-    Convenience decorator that overrides the default Fabric task decorator and
-    adds pre_ and post_ signals to it.
+    Convenience decorator that wraps the default Fabric task decorator with the
+    :py:func:`register` decorator.
     """
     return register(fabric_task(function))

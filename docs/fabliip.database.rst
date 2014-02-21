@@ -4,6 +4,14 @@ fabliip.database package
 Submodules
 ----------
 
+fabliip.database.mysql module
+-----------------------------
+
+.. automodule:: fabliip.database.mysql
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 fabliip.database.pgsql module
 -----------------------------
 

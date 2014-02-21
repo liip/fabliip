@@ -21,6 +21,38 @@ fabliip.decorators module
     :undoc-members:
     :show-inheritance:
 
+fabliip.file module
+-------------------
+
+.. automodule:: fabliip.file
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+fabliip.signals module
+----------------------
+
+.. automodule:: fabliip.signals
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+fabliip.utils module
+--------------------
+
+.. automodule:: fabliip.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+fabliip.version module
+----------------------
+
+.. automodule:: fabliip.version
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
