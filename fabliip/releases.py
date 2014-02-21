@@ -120,7 +120,7 @@ def activate_release(release_name):
              `      '-;         (-'
     """)
 
-    with cd(env.releases_root):
+    with cd(env.project_root):
         run("ln -s {target} new_current".format(
             target=get_release_path(release_name)))
         run("mv -Tf new_current current")
