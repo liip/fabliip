@@ -14,15 +14,12 @@ def dump(backup_path, database_name, user='root', host=None, password=None):
     if host is None:
         host = DEFAULT_HOST
 
-    if password is None:
-        password = get_password(user)
-
-    api.run('mysqldump {database_name} -h{host} -u{user} -p{password} > {backup_path}'
+    api.run('mysqldump {database_name} -h{host} -u{user} {password_param} > {backup_path}'
             .format(
                 database_name=database_name,
                 host=host,
                 user=user,
-                password=password,
+                password_param=get_password_param(user, password),
                 backup_path=backup_path,
             ))
 
@@ -36,22 +33,22 @@ def restore(backup_path, database_name, user='root', host=None, password=None):
     if host is None:
         host = DEFAULT_HOST
 
-    if password is None:
-        password = get_password(user)
-
-    api.run('mysql -h{host} -u{user} -p{password} {database_name} < {backup_path}'
+    api.run('mysql -h{host} -u{user} {password_param} {database_name} < {backup_path}'
             .format(
                 database_name=database_name,
                 host=host,
                 user=user,
-                password=password,
+                password_param=get_password_param(user, password),
                 backup_path=backup_path,
             ))
 
 
-def get_password(user):
+def get_password_param(user, password):
     """
     Ask a password in the prompt
     """
-    return getpass('Enter database password for {user}: '
-                   .format(user=user))
+    if password is None:
+        password = getpass('Enter database password for {user}: '
+                           .format(user=user))
+
+    return '-p{password}'.format(password=password) if password != '' else ''
