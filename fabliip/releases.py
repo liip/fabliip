@@ -30,12 +30,13 @@ work:
     Path to the shared/ directory
 """
 
+from contextlib import nested
 import logging
 import os
 import uuid
 
-from fabric import colors
-from fabric.api import cd, env, prompt, run
+from fabric.api import cd, env, run
+from fabric.context_managers import quiet
 
 from . import signals
 from .file import ls
@@ -152,7 +153,7 @@ def get_currently_installed_version():
     Return the currently installed version (tag) by reading the contents of the
     VERSION file.
     """
-    with cd(env.project_root):
+    with nested(cd(env.project_root), quiet()):
         version = run("cat VERSION")
 
     return version
@@ -163,5 +164,5 @@ def update_version_file(version):
     """
     Update the VERSION file with the given version.
     """
-    with cd(env.project_root):
+    with nested(cd(env.project_root), quiet()):
         run("echo %s > VERSION" % version)
