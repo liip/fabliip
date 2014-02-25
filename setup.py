@@ -7,6 +7,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     description='Set of Fabric functions to help deploying websites.',
+    long_description=open("README.md", 'r').read().decode('utf-8'),
     author='Sylvain Fankhauser',
     author_email='sylvain.fankhauser@liip.ch',
     url='https://github.com/sephii/fabliip',
