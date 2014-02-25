@@ -32,8 +32,12 @@ or firing the signals yourself.
 
 from collections import defaultdict
 from functools import wraps
+import logging
 
 from fabric.api import task as fabric_task
+
+
+logger = logging.getLogger(__name__)
 
 
 _callbacks = defaultdict(list)
@@ -43,6 +47,8 @@ def emit(signal):
     """
     Make all the receivers of this signal aware that it's been sent.
     """
+    logger.debug("Emit signal %s" % signal)
+
     for callback in _callbacks[signal]:
         callback()
 
