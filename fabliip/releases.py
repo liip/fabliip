@@ -149,12 +149,12 @@ def get_releases():
 def get_currently_installed_version():
     """
     Return the currently installed version (tag) by reading the contents of the
-    VERSION file.
+    VERSION file, or None if the VERSION file could not be read.
     """
     with nested(cd(env.project_root), quiet()):
         version = run("cat VERSION")
 
-    return version
+    return version if version.succeeded else None
 
 
 @signals.register
