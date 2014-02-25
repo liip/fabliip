@@ -82,16 +82,12 @@ def link_shared_files(release_name):
     """
     release_path = get_release_path(release_name)
 
-    with cd(env.shared_root):
-        for target, link_name in env.shared_files.iteritems():
-            tmp_link_name = str(uuid.uuid4())
+    for target, link_path in env.shared_files.iteritems():
+        target_abspath = os.path.join(env.shared_root, target)
+        link_path = os.path.join(release_path, link_path)
 
-            target_abspath = os.path.join(release_path, target)
-
-            run("ln -s {target} {tmp_link_name}".format(
-                target=target_abspath, tmp_link_name=tmp_link_name))
-            run("mv -Tf {tmp_link_name} {link_name}".format(
-                tmp_link_name=tmp_link_name, link_name=link_name))
+        run("ln -s {target} {link_path}".format(
+            target=target_abspath, link_path=link_path))
 
 
 @signals.register
