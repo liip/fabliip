@@ -28,12 +28,14 @@ work:
 
 `shared_root`
     Path to the shared/ directory
+
+`shared_files`
+    Dictionary of shared files {target: link_name}
 """
 
 from contextlib import nested
 import logging
 import os
-import uuid
 
 from fabric.api import cd, env, run
 from fabric.context_managers import quiet
