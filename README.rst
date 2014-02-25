@@ -40,6 +40,6 @@ to easily enable/disable the maintenance mode on a Drupal site::
 You should now be able to call ``fab prod enable_maintenance_mode`` to enable
 the maintenance mode on your prod instance.
 
-The ``env.project_root`` variable is important and must be set to ensure that
-all commands work. The ``project_root`` should be the top-directory of your
-git/hg/svn/whatever project.
+The ``env.project_root`` variable is important here because it's needed by the
+``drupal`` module. Please refer to the docs of any module you use to check if
+there's any env variable that must be defined.
