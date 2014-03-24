@@ -51,6 +51,9 @@ from . import signals
 from .file import ls
 
 
+FAILED_RELEASE_SUFFIX = '_failed'
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -175,23 +178,25 @@ def clean_old_releases(keep=5):
         run("rm -rf %s" % get_release_path(release))
 
 
-fail_suffix = '_failed'
-
-
 def invalidate_last_release():
     """
     Invalidate the last made release so that it won't be a target for a rollback.
     """
     releases = get_releases()
     last_release = releases[-1]
-    run("mv %s %s%s" % (get_release_path(last_release), get_release_path(last_release), fail_suffix))
+    run("mv {release} {release}{suffix}".format(
+        release=get_release_path(last_release),
+        suffix=FAILED_RELEASE_SUFFIX))
 
 
 def get_releases():
     """
     Return the list of releases on the server, sorted by oldest to newest.
     """
-    return filter(lambda f: not f.endswith(fail_suffix), sorted(ls(os.path.join(env.releases_root))))
+    return filter(
+        lambda f: not f.endswith(FAILED_RELEASE_SUFFIX),
+        sorted(ls(os.path.join(env.releases_root)))
+    )
 
 
 def get_currently_installed_version():
