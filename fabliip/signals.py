@@ -13,7 +13,7 @@ respond to certain signals. For example consider the following example, in your
 In your separate module, use the ``on`` decorator to hook on this signal::
 
     # This goes in your separate module
-    @signals.on('pre_deploy')
+    @signals.on('fabfile.pre_deploy')
     def my_hook():
         print("This is called at the beginning of the deploy task")
 
