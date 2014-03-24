@@ -31,9 +31,16 @@ work:
 
 `shared_files`
     Dictionary of shared files {target: link_name}
+
+The following variable should be defined if you want to use the various methods
+of this module without having to pass it around :
+
+`release_name`
+    Name of the release
 """
 
 from contextlib import nested
+from functools import wraps
 import logging
 import os
 
@@ -47,15 +54,34 @@ from .file import ls
 logger = logging.getLogger(__name__)
 
 
-def get_release_path(release_name):
+def determine_release_name(release_name):
+    """
+    Try to get ``release_name`` from :py:attr:`fabric.api.env.release_name`.
+    """
+    if release_name is None:
+        if hasattr(env, 'release_name'):
+            release_name = env.release_name
+        else:
+            raise AttributeError
+
+    return release_name
+
+
+def get_release_path(release_name=None):
     """
     Return the absolute path to the directory of the given release.
+
+    If ``release_name is`` not given, try to get it from :py:attr:`fabric.api.env.release_name`.
+
+    Arguments:
+        release_name -- The name of the release (usually a date like YmdHMS)
     """
+    release_name = determine_release_name(release_name)
     return os.path.join(env.releases_root, release_name)
 
 
 @signals.register
-def create_release(release_name, tag):
+def create_release(tag, release_name=None):
     """
     Create the directory for a new release and extract the contents from the
     git repository at the given tag and put them in this directory.
@@ -75,10 +101,15 @@ def create_release(release_name, tag):
 
 
 @signals.register
-def link_shared_files(release_name):
+def link_shared_files(release_name=None):
     """
     Create or update links to shared files defined in the ``shared_files`` env
     variable.
+
+    If ``release_name is`` not given, try to get it from :py:attr:`fabric.api.env.release_name`.
+
+    Arguments:
+        release_name -- The name of the release (usually a date like YmdHMS)
     """
     release_path = get_release_path(release_name)
 
@@ -91,9 +122,14 @@ def link_shared_files(release_name):
 
 
 @signals.register
-def activate_release(release_name):
+def activate_release(release_name=None):
     """
     Activate the given release by making the ``current`` symlink point to it.
+
+    If ``release_name is`` not given, try to get it from :py:attr:`fabric.api.env.release_name`.
+
+    Arguments:
+        release_name -- The name of the release (usually a date like YmdHMS)
     """
     logger.debug("""
 
