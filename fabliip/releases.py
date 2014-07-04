@@ -96,12 +96,14 @@ def create_release(tag, release_name=None):
     release_path = get_release_path(release_name)
 
     run("mkdir %s" % release_path)
-    run("TMPFILE=$(mktemp) "
-        " && git archive --output=$TMPFILE --remote={remote} {version}"
-        " && tar -x -C $TMPFILE {release_path}".format(
+    tmpfile = run("mktemp")
+    run("git archive --output={tmpfile} --remote={remote} {version}"
+        " && tar -x -C {tmpfile} {release_path}".format(
             remote=env.repository_root,
             version=tag,
-            release_path=release_path))
+            release_path=release_path)
+            tmpfile=tmpfile)
+    run("rm -f {tmpfile}".format(tmpfile=tmpfile)
 
 
 @signals.register
