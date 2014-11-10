@@ -25,7 +25,7 @@ def update_remote_repository_root(tag):
         api.run('git fetch -t -p')
         api.run('git checkout {tag}'.format(tag=tag))
         api.run('git submodule sync')
-        api.run('git submodule update')
+        api.run('git submodule update --init')
 
 
 def get_latest_tag(commit='HEAD', run_locally=True):
