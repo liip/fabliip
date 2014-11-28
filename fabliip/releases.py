@@ -97,7 +97,7 @@ def create_release(tag, release_name=None):
     run("mkdir %s" % release_path)
     tmpfile = run("mktemp")
     run("git archive --output={tmpfile} --remote={remote} {version}"
-        " && tar xf {tmpfile} {release_path}".format(
+        " && tar xf {tmpfile} -C {release_path}".format(
             remote=env.repository_root,
             version=tag,
             release_path=release_path,
