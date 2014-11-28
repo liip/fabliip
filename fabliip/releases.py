@@ -176,10 +176,13 @@ def clean_old_releases(keep=5):
         keep -- The number of releases to keep
     """
     releases = get_releases()
+    status = True
 
     for release in releases[:-keep]:
-        run("rm -rf %s" % get_release_path(release))
-
+        status = run("rm -rf %s" % get_release_path(release), warn_only=True)
+        if status.return_code != 0:
+            status = False
+    return status
 
 def invalidate_last_release():
     """
