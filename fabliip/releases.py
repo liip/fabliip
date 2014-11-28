@@ -40,7 +40,6 @@ of this module without having to pass it around :
 """
 
 from contextlib import nested
-from functools import wraps
 import logging
 import os
 
@@ -101,9 +100,9 @@ def create_release(tag, release_name=None):
         " && tar -x -C {tmpfile} {release_path}".format(
             remote=env.repository_root,
             version=tag,
-            release_path=release_path)
-            tmpfile=tmpfile)
-    run("rm -f {tmpfile}".format(tmpfile=tmpfile)
+            release_path=release_path,
+            tmpfile=tmpfile))
+    run("rm -f {tmpfile}".format(tmpfile=tmpfile))
 
 
 @signals.register
@@ -183,6 +182,7 @@ def clean_old_releases(keep=5):
         if status.return_code != 0:
             status = False
     return status
+
 
 def invalidate_last_release():
     """
