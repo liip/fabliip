@@ -180,6 +180,7 @@ def clean_old_releases(keep=5):
     for release in releases[:-keep]:
         status = run("rm -rf %s" % get_release_path(release), warn_only=True)
         if status.return_code != 0:
+            logger.debug("Failed with status code [%s]" % status.return_code)
             status = False
     return status
 
